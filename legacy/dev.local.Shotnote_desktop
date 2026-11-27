@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Shotnote
+Comment=Take a screenshot and annotate it
+Exec=shotnote %F
+Icon=applets-screenshooter
+Terminal=false
+Categories=Graphics;Utility;
+MimeType=image/png;image/jpeg;
+StartupNotify=true
+StartupWMClass=dev.local.Shotnote
