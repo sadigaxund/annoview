@@ -1,4 +1,4 @@
-//! Shotnote: screenshot annotator and image viewer for GTK4.
+//! Annoview: screenshot annotator and image viewer for GTK4.
 
 mod app;
 mod canvas;
@@ -16,12 +16,12 @@ use std::io::Read;
 use std::sync::OnceLock;
 use std::time::Instant;
 
-pub const APP_ID: &str = "dev.local.Shotnote";
+pub const APP_ID: &str = "io.github.sadigaxund.Annoview";
 pub static START: OnceLock<Instant> = OnceLock::new();
 
-/// Prints a stage time to stderr when `SHOTNOTE_TIMING=2` is set.
+/// Prints a stage time to stderr when `ANNOVIEW_TIMING=2` is set.
 pub fn lap(stage: &str) {
-    if std::env::var_os("SHOTNOTE_TIMING").is_some_and(|v| v == "2") {
+    if std::env::var_os("ANNOVIEW_TIMING").is_some_and(|v| v == "2") {
         let ms = START.get().map_or(0.0, |s| s.elapsed().as_secs_f64() * 1000.0);
         eprintln!("{ms:8.1} ms  {stage}");
     }

@@ -164,7 +164,7 @@ mod imp {
 
     #[glib::object_subclass]
     impl ObjectSubclass for Canvas {
-        const NAME: &'static str = "ShotnoteCanvas";
+        const NAME: &'static str = "AnnoviewCanvas";
         type Type = super::Canvas;
         type ParentType = gtk::Widget;
     }
@@ -1114,7 +1114,7 @@ impl Canvas {
         let overlay = self.st().overlay.clone();
         let Some(overlay) = overlay else { return };
         let tv = gtk::TextView::new();
-        tv.add_css_class("shotnote-text");
+        tv.add_css_class("annoview-text");
         tv.set_wrap_mode(gtk::WrapMode::None);
         tv.set_halign(gtk::Align::Start);
         tv.set_valign(gtk::Align::Start);
@@ -1162,10 +1162,10 @@ impl Canvas {
         let c = crate::logic::palette::hexcol(p.color);
         let fam = p.font_family.replace('"', "");
         let css = format!(
-            ".shotnote-text, .shotnote-text text {{ background: transparent; color: transparent; \
+            ".annoview-text, .annoview-text text {{ background: transparent; color: transparent; \
              caret-color: {c}; font-family: \"{fam}\"; font-size: {:.2}px; font-weight: {}; padding: 0; \
              margin: 0; border: none; min-height: 0; }} \
-             .shotnote-text text selection {{ background: alpha(#3584e4, 0.35); }}",
+             .annoview-text text selection {{ background: alpha(#3584e4, 0.35); }}",
             p.font_size as f64 * scale,
             if p.bold { 700 } else { 400 }
         );

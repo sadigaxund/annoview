@@ -1,5 +1,5 @@
 [package]
-name = "shotnote"
+name = "annoview"
 version = "2026.11.27"
 edition = "2021"
 license = "MIT"

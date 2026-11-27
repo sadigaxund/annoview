@@ -104,7 +104,7 @@ impl Win {
         overlay.set_child(Some(&canvas));
         overlay.set_hexpand(true);
         let toast_label = gtk::Label::new(None);
-        toast_label.add_css_class("shotnote-toast");
+        toast_label.add_css_class("annoview-toast");
         toast_label.set_halign(gtk::Align::Center);
         toast_label.set_valign(gtk::Align::End);
         toast_label.set_margin_bottom(18);
@@ -211,7 +211,7 @@ impl Win {
                 }
             });
         }
-        if let Ok(out) = std::env::var("SHOTNOTE_DUMP") {
+        if let Ok(out) = std::env::var("ANNOVIEW_DUMP") {
             let w = self.window.clone();
             glib::timeout_add_local_once(Duration::from_millis(1500), move || {
                 dump_window(&w, &out);
@@ -221,7 +221,7 @@ impl Win {
         crate::lap("present");
         self.window.present();
         #[cfg(feature = "selftest")]
-        if let Ok(f) = std::env::var("SHOTNOTE_SCRIPT") {
+        if let Ok(f) = std::env::var("ANNOVIEW_SCRIPT") {
             let script = std::fs::read_to_string(f).unwrap_or_default();
             let w = self.clone();
             glib::timeout_add_local_once(Duration::from_millis(1200), move || crate::selftest::run(w, script));
@@ -1146,7 +1146,7 @@ fn texture_from_surface(s: &ImageSurface) -> gdk::Texture {
     tex.expect("texture").upcast()
 }
 
-/// Renders the window content to a PNG. Used by `SHOTNOTE_DUMP=<file>` for visual checks.
+/// Renders the window content to a PNG. Used by `ANNOVIEW_DUMP=<file>` for visual checks.
 pub(crate) fn dump_window(win: &adw::ApplicationWindow, path: &str) {
     let (w, h) = (win.width() as f64, win.height() as f64);
     let paintable = gtk::WidgetPaintable::new(Some(win));

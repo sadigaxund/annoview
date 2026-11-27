@@ -106,7 +106,7 @@ fn portal(done: Done) {
         };
         let sender = bus.unique_name().map(|n| n.trim_start_matches(':').replace('.', "_")).unwrap_or_default();
         let token = format!(
-            "shotnote{}x{}",
+            "annoview{}x{}",
             std::process::id(),
             glib::real_time() / 1000
         );

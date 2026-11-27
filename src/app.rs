@@ -19,7 +19,7 @@ pub struct Ctx {
 }
 
 pub fn conf_path() -> PathBuf {
-    glib::user_config_dir().join("shotnote").join("settings.json")
+    glib::user_config_dir().join("annoview").join("settings.json")
 }
 
 pub fn surface_from_texture(tex: &gdk::Texture) -> Result<ImageSurface, String> {
@@ -45,7 +45,7 @@ impl Ctx {
             app,
             settings: RefCell::new(Settings::from_json(&text)),
             save_pending: Cell::new(false),
-            timing: std::env::var_os("SHOTNOTE_TIMING").is_some_and(|v| v == "1" || v == "2"),
+            timing: std::env::var_os("ANNOVIEW_TIMING").is_some_and(|v| v == "1" || v == "2"),
         })
     }
 
@@ -110,7 +110,7 @@ pub fn install_css() {
     provider.load_from_string(
         ".tool-active { background: alpha(@accent_bg_color, 0.32); }\
          .tool-active:hover { background: alpha(@accent_bg_color, 0.45); }\
-         .shotnote-toast { background: rgba(30, 30, 30, 0.88); color: white;\
+         .annoview-toast { background: rgba(30, 30, 30, 0.88); color: white;\
           padding: 6px 16px; border-radius: 999px; font-weight: 600; }",
     );
     if let Some(display) = gdk::Display::default() {

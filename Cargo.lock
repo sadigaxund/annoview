@@ -3,6 +3,18 @@
 version = 4
 
 [[package]]
+name = "annoview"
+version = "2026.11.27"
+dependencies = [
+ "cairo-rs",
+ "gtk4",
+ "libadwaita",
+ "pangocairo",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "autocfg"
 version = "1.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -608,18 +620,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9c187e0a369471c550af028cba56d4f4fa2a489ad28151ae95a4d340a2a8b782"
 dependencies = [
  "serde_core",
-]
-
-[[package]]
-name = "shotnote"
-version = "2026.11.27"
-dependencies = [
- "cairo-rs",
- "gtk4",
- "libadwaita",
- "pangocairo",
- "serde",
- "serde_json",
 ]
 
 [[package]]
