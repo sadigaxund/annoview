@@ -1,0 +1,18 @@
+[package]
+name = "shotnote"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "Screenshot annotator and image viewer for GTK4"
+
+[dependencies]
+gtk = { package = "gtk4", version = "0.11", features = ["v4_14"] }
+adw = { package = "libadwaita", version = "0.9", features = ["v1_5"] }
+pangocairo = "0.22"
+serde = "1"
+serde_json = { version = "1", features = ["preserve_order"] }
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 4
