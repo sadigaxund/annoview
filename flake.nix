@@ -1,5 +1,5 @@
 {
-  description = "Shotnote: screenshot annotator and image viewer";
+  description = "Annoview: screenshot annotator and image viewer";
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
@@ -11,7 +11,7 @@
       runtimeTools = with pkgs; [ wl-clipboard grim slurp ];
     in {
       packages.${system}.default = pkgs.rustPlatform.buildRustPackage {
-        pname = "shotnote";
+        pname = "annoview";
         version = "2026.11.27";
         src = lib.cleanSourceWith {
           src = ./.;
@@ -26,19 +26,21 @@
         ];
         gappsWrapperArgs = [ "--prefix" "PATH" ":" (lib.makeBinPath runtimeTools) ];
         postInstall = ''
-          install -Dm644 data/dev.local.Shotnote.desktop \
-            $out/share/applications/dev.local.Shotnote.desktop
+          install -Dm644 data/io.github.sadigaxund.Annoview.desktop \
+            $out/share/applications/io.github.sadigaxund.Annoview.desktop
+          install -Dm644 data/icons/io.github.sadigaxund.Annoview.svg \
+            $out/share/icons/hicolor/scalable/apps/io.github.sadigaxund.Annoview.svg
         '';
         meta = {
           description = "Screenshot annotator and image viewer";
           license = lib.licenses.mit;
-          mainProgram = "shotnote";
+          mainProgram = "annoview";
         };
       };
 
       apps.${system}.default = {
         type = "app";
-        program = "${self.packages.${system}.default}/bin/shotnote";
+        program = "${self.packages.${system}.default}/bin/annoview";
       };
 
       devShells.${system}.default = pkgs.mkShell {
