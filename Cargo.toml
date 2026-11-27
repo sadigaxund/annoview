@@ -9,6 +9,7 @@ description = "Screenshot annotator and image viewer for GTK4"
 gtk = { package = "gtk4", version = "0.11", features = ["v4_14"] }
 adw = { package = "libadwaita", version = "0.9", features = ["v1_5"] }
 pangocairo = "0.22"
+cairo-rs = { version = "0.22", features = ["png"] }
 serde = "1"
 serde_json = { version = "1", features = ["preserve_order"] }
 

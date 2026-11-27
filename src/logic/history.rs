@@ -83,10 +83,12 @@ impl History {
         !self.redo.is_empty()
     }
 
+    #[cfg(test)]
     pub fn bytes(&self) -> usize {
         self.bytes
     }
 
+    #[cfg(test)]
     pub fn undo_len(&self) -> usize {
         self.undo.len()
     }
