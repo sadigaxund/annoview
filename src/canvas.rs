@@ -240,13 +240,13 @@ impl Canvas {
         let w = self.downgrade();
         g.connect_drag_begin(move |g, x, y| {
             if let Some(c) = w.upgrade() {
-                c.drag_begin(g, x, y);
+                c.drag_begin(x, y, g.current_event_state().contains(gdk::ModifierType::CONTROL_MASK));
             }
         });
         let w = self.downgrade();
         g.connect_drag_update(move |g, dx, dy| {
             if let Some(c) = w.upgrade() {
-                c.drag_update(g, dx, dy);
+                c.drag_update(dx, dy, g.current_event_state().contains(gdk::ModifierType::SHIFT_MASK));
             }
         });
         let w = self.downgrade();
@@ -869,9 +869,8 @@ impl Canvas {
     }
 
     // ---- pointer input
-    fn drag_begin(&self, g: &gtk::GestureDrag, x: f64, y: f64) {
+    fn drag_begin(&self, x: f64, y: f64, ctrl: bool) {
         self.grab_focus();
-        let state = g.current_event_state();
         if self.text_active() {
             self.commit_text();
         }
@@ -887,8 +886,7 @@ impl Canvas {
         match tool {
             Tool::Pen | Tool::Hl => {
                 let mut s = self.st();
-                let width = if tool == Tool::Hl { s.params.size } else { s.params.size };
-                let it = Item::new(tool, s.params.color, s.params.fill, width, s.params.hl_alpha, p);
+                let it = Item::new(tool, s.params.color, s.params.fill, s.params.size, s.params.hl_alpha, p);
                 s.item = Some(it);
             }
             Tool::Text => self.start_text(p),
@@ -902,7 +900,7 @@ impl Canvas {
                 let mut s = self.st();
                 match s.sel {
                     Some(r) if in_rect(r, p) => {
-                        let copy = state.contains(gdk::ModifierType::CONTROL_MASK);
+                        let copy = ctrl;
                         let surf = s.region_surface(r.0, r.1, r.2, r.3);
                         let bg = if copy { None } else { Some(s.ring_color(r.0, r.1, r.2, r.3)) };
                         s.float = Some(Float { surf, dx: 0, dy: 0, bg });
@@ -931,12 +929,11 @@ impl Canvas {
         }
     }
 
-    fn drag_update(&self, g: &gtk::GestureDrag, dx: f64, dy: f64) {
+    fn drag_update(&self, dx: f64, dy: f64, shift: bool) {
         if self.st().panning {
             self.drag_update_pan(dx, dy);
             return;
         }
-        let shift = g.current_event_state().contains(gdk::ModifierType::SHIFT_MASK);
         let pick = {
             let mut s = self.st();
             let (px, py) = view::to_img(s.ox, s.oy, s.scale, s.w0.0 + dx, s.w0.1 + dy);
@@ -1214,4 +1211,35 @@ fn in_rect(r: (i32, i32, i32, i32), p: (f64, f64)) -> bool {
 fn text_of(tv: &gtk::TextView) -> String {
     let b = tv.buffer();
     b.text(&b.start_iter(), &b.end_iter(), false).to_string()
+}
+
+#[cfg(feature = "selftest")]
+impl Canvas {
+    /// Replays a drag given in image coordinates. Used by the scripted self-test.
+    pub fn test_drag(&self, pts: &[(f64, f64)], ctrl: bool, shift: bool) {
+        let to_w = |p: (f64, f64)| {
+            let s = self.st();
+            (s.ox + p.0 * s.scale, s.oy + p.1 * s.scale)
+        };
+        let (x0, y0) = to_w(pts[0]);
+        self.drag_begin(x0, y0, ctrl);
+        for p in &pts[1..] {
+            let (x, y) = to_w(*p);
+            self.drag_update(x - x0, y - y0, shift);
+        }
+        self.drag_end();
+    }
+
+    /// Types `text` at an image point with the text tool and commits it.
+    pub fn test_text(&self, p: (f64, f64), text: &str) {
+        let (x, y) = {
+            let s = self.st();
+            (s.ox + p.0 * s.scale, s.oy + p.1 * s.scale)
+        };
+        self.drag_begin(x, y, false);
+        self.drag_end();
+        if let Some(tv) = self.text_view() {
+            tv.buffer().set_text(text);
+        }
+    }
 }

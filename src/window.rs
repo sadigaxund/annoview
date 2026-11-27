@@ -23,7 +23,7 @@ use std::time::Duration;
 pub struct Win {
     ctx: Rc<Ctx>,
     pub window: adw::ApplicationWindow,
-    canvas: Canvas,
+    pub(crate) canvas: Canvas,
     header: adw::HeaderBar,
     toolbar: gtk::Box,
     wtitle: adw::WindowTitle,
@@ -218,6 +218,23 @@ impl Win {
             });
         }
         self.window.present();
+        #[cfg(feature = "selftest")]
+        if let Ok(f) = std::env::var("SHOTNOTE_SCRIPT") {
+            let script = std::fs::read_to_string(f).unwrap_or_default();
+            let w = self.clone();
+            glib::timeout_add_local_once(Duration::from_millis(1200), move || crate::selftest::run(w, script));
+        }
+    }
+
+    #[cfg(feature = "selftest")]
+    pub(crate) fn set_size(self: &Rc<Self>, which: &str, v: i64) {
+        self.cfg(|c| match which {
+            "pen" => c.pen_size = v,
+            "hl" => c.hl_size = v,
+            "shape" => c.shape_size = v,
+            _ => c.font_size = v,
+        });
+        self.apply_params();
     }
 
     fn wire(self: &Rc<Self>) {
@@ -610,7 +627,7 @@ impl Win {
     }
 
     // ---- tool, color and parameter state
-    fn choose_tool(self: &Rc<Self>, t: Tool) {
+    pub(crate) fn choose_tool(self: &Rc<Self>, t: Tool) {
         if t == Tool::Pick && self.canvas.tool() != Tool::Pick {
             self.prev_tool.set(self.canvas.tool());
         }
@@ -658,7 +675,7 @@ impl Win {
         self.apply_params();
     }
 
-    fn set_color(self: &Rc<Self>, rgb: Rgb) {
+    pub(crate) fn set_color(self: &Rc<Self>, rgb: Rgb) {
         let hex = hexcol(rgb);
         let hl = self.cur_hl();
         self.cfg(|c| if hl { c.hl_rgb = hex } else { c.pen_rgb = hex });
@@ -749,7 +766,7 @@ impl Win {
     }
 
     // ---- keyboard
-    fn on_key(self: &Rc<Self>, key: gdk::Key, state: gdk::ModifierType) -> glib::Propagation {
+    pub(crate) fn on_key(self: &Rc<Self>, key: gdk::Key, state: gdk::ModifierType) -> glib::Propagation {
         use glib::Propagation::{Proceed, Stop};
         let c = &self.canvas;
         let ctrl = state.contains(gdk::ModifierType::CONTROL_MASK);
@@ -868,7 +885,7 @@ impl Win {
     }
 
     // ---- file operations
-    fn copy_image(self: &Rc<Self>) {
+    pub(crate) fn copy_image(self: &Rc<Self>) {
         self.canvas.commit_text();
         let surf = self.canvas.copy_surface();
         let mut png = Vec::new();
@@ -898,7 +915,7 @@ impl Win {
     }
 
     /// Writes the image to the copy path. Returns false when the write failed.
-    fn save(self: &Rc<Self>, after: Option<Box<dyn FnOnce()>>) -> bool {
+    pub(crate) fn save(self: &Rc<Self>, after: Option<Box<dyn FnOnce()>>) -> bool {
         self.canvas.commit_text();
         let target = naming::save_target(
             self.path.borrow().as_deref(),
@@ -1006,7 +1023,7 @@ impl Win {
         d.present(Some(&self.window));
     }
 
-    fn navigate(self: &Rc<Self>, step: i64) {
+    pub(crate) fn navigate(self: &Rc<Self>, step: i64) {
         let Some(cur) = self.path.borrow().clone() else { return };
         let list = folder::list_images(&cur);
         let Some(next) = folder::neighbor(&list, &cur, step) else { return };
@@ -1014,7 +1031,7 @@ impl Win {
         self.guard_unsaved(Box::new(move || w.load_path(&next)));
     }
 
-    fn load_path(self: &Rc<Self>, p: &Path) {
+    pub(crate) fn load_path(self: &Rc<Self>, p: &Path) {
         match surface_from_file(p) {
             Ok(s) => {
                 self.canvas.load_surface(s);
@@ -1112,7 +1129,7 @@ fn texture_from_surface(s: &ImageSurface) -> gdk::Texture {
 }
 
 /// Renders the window content to a PNG. Used by `SHOTNOTE_DUMP=<file>` for visual checks.
-fn dump_window(win: &adw::ApplicationWindow, path: &str) {
+pub(crate) fn dump_window(win: &adw::ApplicationWindow, path: &str) {
     let (w, h) = (win.width() as f64, win.height() as f64);
     let paintable = gtk::WidgetPaintable::new(Some(win));
     let snap = gtk::Snapshot::new();

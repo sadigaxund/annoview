@@ -5,6 +5,8 @@ mod canvas;
 mod capture;
 mod logic;
 mod paint;
+#[cfg(feature = "selftest")]
+mod selftest;
 mod widgets;
 mod window;
 
