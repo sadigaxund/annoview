@@ -227,6 +227,20 @@ impl Win {
     }
 
     #[cfg(feature = "selftest")]
+    pub(crate) fn test_popover(self: &Rc<Self>, which: &str) {
+        for p in self.popovers.borrow().values() {
+            p.popdown();
+        }
+        match which {
+            "shape_menu" => self.popover_for("shape_menu").popup(),
+            "pen" => self.show_options("pen"),
+            "hl" => self.show_options("hl"),
+            "text" => self.show_options("text"),
+            _ => self.show_options("shape"),
+        }
+    }
+
+    #[cfg(feature = "selftest")]
     pub(crate) fn set_size(self: &Rc<Self>, which: &str, v: i64) {
         self.cfg(|c| match which {
             "pen" => c.pen_size = v,
@@ -898,6 +912,8 @@ impl Win {
                     let mut child = std::process::Command::new("wl-copy")
                         .args(["-t", "image/png"])
                         .stdin(std::process::Stdio::piped())
+                        .stdout(std::process::Stdio::null())
+                        .stderr(std::process::Stdio::null())
                         .spawn()?;
                     child.stdin.take().expect("stdin").write_all(&png)?;
                     Ok(child.wait()?.success())

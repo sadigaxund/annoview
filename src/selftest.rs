@@ -71,7 +71,11 @@ fn exec(win: &Rc<Win>, line: &str) -> u64 {
             let v: i64 = parts[2].parse().unwrap_or(5);
             win.set_size(parts[1], v);
         }
+        Some("gshot") => {
+            let _ = std::process::Command::new("grim").arg(parts[1]).status();
+        }
         Some("shot") => dump_window(&win.window, parts[1]),
+        Some("popover") => win.test_popover(parts[1]),
         Some("commit") => c.commit_text(),
         Some("quit") => std::process::exit(0),
         _ => eprintln!("selftest: unknown command {line}"),
