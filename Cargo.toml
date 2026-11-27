@@ -1,6 +1,6 @@
 [package]
 name = "shotnote"
-version = "0.1.0"
+version = "2026.11.27"
 edition = "2021"
 license = "MIT"
 description = "Screenshot annotator and image viewer for GTK4"

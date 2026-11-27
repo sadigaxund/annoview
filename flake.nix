@@ -12,7 +12,7 @@
     in {
       packages.${system}.default = pkgs.rustPlatform.buildRustPackage {
         pname = "shotnote";
-        version = "0.1.0";
+        version = "2026.11.27";
         src = lib.cleanSourceWith {
           src = ./.;
           filter = path: type:

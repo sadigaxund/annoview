@@ -6,6 +6,8 @@ Releases use date versions: `YYYY.MM.DD`, tagged `vYYYY.MM.DD`.
 
 ## [Unreleased]
 
+## [2026.11.27]
+
 ### Changed
 
 - Rewrote Shotnote from Python to Rust with gtk4-rs and libadwaita. Every tool, key, menu item and setting of the Python version is kept.
@@ -19,3 +21,6 @@ Releases use date versions: `YYYY.MM.DD`, tagged `vYYYY.MM.DD`.
 - Capture on Hyprland and other wlroots desktops through `grim` and `slurp`. The same path is the fallback when the portal fails.
 - `SHOTNOTE_TIMING=1` prints the time to the first painted frame and exits.
 - Desktop entry for png, jpeg, webp, gif, bmp and tiff.
+
+[Unreleased]: https://github.com/sadigaxund/shotnote/compare/v2026.11.27...HEAD
+[2026.11.27]: https://github.com/sadigaxund/shotnote/releases/tag/v2026.11.27

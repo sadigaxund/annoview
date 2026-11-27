@@ -612,7 +612,7 @@ dependencies = [
 
 [[package]]
 name = "shotnote"
-version = "0.1.0"
+version = "2026.11.27"
 dependencies = [
  "cairo-rs",
  "gtk4",
