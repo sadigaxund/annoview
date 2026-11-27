@@ -57,6 +57,7 @@ pub fn frame_dt(now: f64, last: f64) -> f64 {
 
 /// Initial window size in logical pixels: image plus chrome, capped to 96% by 92% of the monitor.
 /// Returns (width, height, capped).
+#[allow(clippy::too_many_arguments)]
 pub fn window_size(
     iw: i32, ih: i32, dev: f64, side: i32, chrome_h: i32, min_w: i32, mon_w: i32, mon_h: i32,
 ) -> (i32, i32, bool) {

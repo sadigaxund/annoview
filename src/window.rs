@@ -203,6 +203,7 @@ impl Win {
             self.window.connect_map(|w| {
                 if let Some(clock) = w.frame_clock() {
                     clock.connect_after_paint(|_| {
+                        crate::lap("first paint");
                         let ms = crate::START.get().map_or(0.0, |s| s.elapsed().as_secs_f64() * 1000.0);
                         println!("{ms:.1}");
                         std::process::exit(0);
@@ -217,6 +218,7 @@ impl Win {
                 std::process::exit(0);
             });
         }
+        crate::lap("present");
         self.window.present();
         #[cfg(feature = "selftest")]
         if let Ok(f) = std::env::var("SHOTNOTE_SCRIPT") {
@@ -1083,7 +1085,7 @@ impl Win {
         d.present(Some(&self.window));
     }
 
-    fn trash(self: &Rc<Self>) {
+    pub(crate) fn trash(self: &Rc<Self>) {
         let Some(cur) = self.path.borrow().clone() else {
             self.toast("Nothing to trash: the image has no file");
             return;

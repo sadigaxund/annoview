@@ -32,7 +32,10 @@ pub fn surface_from_texture(tex: &gdk::Texture) -> Result<ImageSurface, String> 
 
 pub fn surface_from_file(path: &Path) -> Result<ImageSurface, String> {
     let tex = gdk::Texture::from_filename(path).map_err(|e| e.message().to_string())?;
-    surface_from_texture(&tex)
+    crate::lap("decoded");
+    let s = surface_from_texture(&tex);
+    crate::lap("converted");
+    s
 }
 
 impl Ctx {
@@ -42,7 +45,7 @@ impl Ctx {
             app,
             settings: RefCell::new(Settings::from_json(&text)),
             save_pending: Cell::new(false),
-            timing: std::env::var_os("SHOTNOTE_TIMING").is_some_and(|v| v == "1"),
+            timing: std::env::var_os("SHOTNOTE_TIMING").is_some_and(|v| v == "1" || v == "2"),
         })
     }
 

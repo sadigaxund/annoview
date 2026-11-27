@@ -38,6 +38,7 @@ pub fn pick_pixel(buf: &[u8], stride: usize, w: i32, h: i32, px: f64, py: f64) -
 
 /// Most common color in the 1 px ring just outside the rectangle, the background guess.
 /// Ties go to the color seen first. White when the ring is outside the image.
+#[allow(clippy::too_many_arguments)]
 pub fn ring_color(buf: &[u8], stride: usize, iw: i32, ih: i32, x: i32, y: i32, w: i32, h: i32) -> (f64, f64, f64) {
     let mut counts: HashMap<(u8, u8, u8), (u32, u32)> = HashMap::new();
     let mut seq = 0u32;
@@ -124,7 +125,7 @@ mod tests {
         assert_eq!(r[0], 5);
         let zeros = vec![0u8; 16];
         write_region(&mut buf, 16, 1, 1, 2, 2, &zeros);
-        assert_eq!(buf[(1 * 4 + 1) * 4], 0);
+        assert_eq!(buf[20], 0);
         write_region(&mut buf, 16, 1, 1, 2, 2, &r);
         assert_eq!(buf, img(4, 3));
     }
@@ -145,7 +146,7 @@ mod tests {
         let a = img(3, 2);
         let (b, w, h) = transform(&a, 12, 3, 2, Xform::RotRight);
         assert_eq!((w, h), (2, 3));
-        assert_eq!(b[(0 * 2 + 1) * 4], 0);
+        assert_eq!(b[4], 0);
     }
 
     #[test]

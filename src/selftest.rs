@@ -76,6 +76,7 @@ fn exec(win: &Rc<Win>, line: &str) -> u64 {
         }
         Some("shot") => dump_window(&win.window, parts[1]),
         Some("popover") => win.test_popover(parts[1]),
+        Some("trash") => win.trash(),
         Some("commit") => c.commit_text(),
         Some("quit") => std::process::exit(0),
         _ => eprintln!("selftest: unknown command {line}"),
