@@ -1,12 +1,14 @@
-# shotnote
+# annoview
+
+<img src="data/icons/io.github.sadigaxund.Annoview.svg" alt="Annoview logo" width="96">
 
 *Take a screenshot, annotate it, keep the notes. Also an image viewer.*
 
-Shotnote opens a screenshot straight in an editor with pencil, highlighter, text, shapes and area select.
+Annoview opens a screenshot straight in an editor with pencil, highlighter, text, shapes and area select.
 It is built with GTK4 and libadwaita, and runs on GNOME and Hyprland.
 
 ```console
-$ shotnote
+$ annoview
 ```
 
 ## Install
@@ -14,34 +16,34 @@ $ shotnote
 Nix, with flakes:
 
 ```console
-nix run github:sadigaxund/shotnote -- some-image.png
+nix run github:sadigaxund/annoview -- some-image.png
 ```
 
 ```console
-nix profile install github:sadigaxund/shotnote
+nix profile install github:sadigaxund/annoview
 ```
 
 The package puts `wl-clipboard`, `grim` and `slurp` on the program's `PATH`.
-It installs the desktop entry `dev.local.Shotnote.desktop` for png, jpeg, webp, gif, bmp and tiff.
+It installs the desktop entry `io.github.sadigaxund.Annoview.desktop` for png, jpeg, webp, gif, bmp and tiff.
 
 ## Usage
 
 ```console
-shotnote                # capture, then annotate
-shotnote file.png       # open a file
-cmd | shotnote -        # read an image from stdin
+annoview                # capture, then annotate
+annoview file.png       # open a file
+cmd | annoview -        # read an image from stdin
 ```
 
 Capture uses the xdg screenshot portal on GNOME.
 On Hyprland, or when the portal fails, it runs `grim -g "$(slurp)"`.
-Bind it to a key in your desktop, for example `bind = SUPER SHIFT, S, exec, shotnote` in `hyprland.conf`.
+Bind it to a key in your desktop, for example `bind = SUPER SHIFT, S, exec, annoview` in `hyprland.conf`.
 
 Ctrl+S never overwrites the file you opened.
 It writes a copy named `<name> (2).png` next to it, and later saves in the same window update that copy.
 An image from stdin is saved in `~/Pictures/Screenshots`.
 
 Right-click a tool button for its settings: size, opacity, font, fill.
-Settings are kept in `~/.config/shotnote/settings.json`.
+Settings are kept in `~/.config/annoview/settings.json`.
 
 ## Keys
 
@@ -81,7 +83,7 @@ cargo run --release -- some-image.png
 cargo test
 ```
 
-`SHOTNOTE_TIMING=1` prints the milliseconds to the first painted frame and exits.
+`ANNOVIEW_TIMING=1` prints the milliseconds to the first painted frame and exits.
 
 ## License
 

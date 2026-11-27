@@ -6,14 +6,14 @@ A line starting with "Differs" records a deliberate gap and its reason.
 
 ## Entry points
 
-- [x] `shotnote` with no arguments starts a capture, then opens the result in the editor.
-- [x] `shotnote file.png` opens that file.
-- [x] `shotnote a.png b.png` opens one window per file.
-- [x] `cmd | shotnote -` reads an image from stdin and opens it with no path.
+- [x] `annoview` with no arguments starts a capture, then opens the result in the editor.
+- [x] `annoview file.png` opens that file.
+- [x] `annoview a.png b.png` opens one window per file.
+- [x] `cmd | annoview -` reads an image from stdin and opens it with no path.
 - [x] A stdin image that cannot be decoded prints an error to stderr and opens nothing.
 - [x] A file that cannot be opened prints an error to stderr.
-- [x] Application id is `dev.local.Shotnote`. Windows are not unique: every launch is its own process.
-- [x] `SHOTNOTE_TIMING=1` prints milliseconds from process start to the first painted frame, then exits.
+- [x] Application id is `io.github.sadigaxund.Annoview`. Windows are not unique: every launch is its own process.
+- [x] `ANNOVIEW_TIMING=1` prints milliseconds from process start to the first painted frame, then exits.
 
 ## Capture
 
@@ -160,7 +160,7 @@ A line starting with "Differs" records a deliberate gap and its reason.
 
 ## Settings
 
-- [x] File is `~/.config/shotnote/settings.json` (GLib user config dir).
+- [x] File is `~/.config/annoview/settings.json` (GLib user config dir).
 - [x] Keys and defaults: `pen_rgb` `#xxxxxx` (palette 22), `hl_rgb` (palette 67), `pen_size` 5, `hl_size` 24, `hl_alpha` 80, `shape_size` 4, `shape` `rect`, `fill` false, `font_family` `Sans`, `font_size` 28, `bold` false.
 - [x] Unknown keys are dropped. A missing or malformed file gives defaults.
 - [x] A bad color string falls back to its default. A bad shape name falls back to `rect`.
@@ -180,10 +180,10 @@ A line starting with "Differs" records a deliberate gap and its reason.
 
 ## Build and packaging
 
-- [x] Cargo project at the repo root, binary `shotnote`, `Cargo.lock` committed.
+- [x] Cargo project at the repo root, binary `annoview`, `Cargo.lock` committed.
 - [x] `flake.nix` with `packages.default`, `apps.default`, `devShells.default`.
 - [x] Runtime PATH has `wl-clipboard`, `grim`, `slurp`.
-- [x] Desktop file `dev.local.Shotnote.desktop`, MimeType png, jpeg, webp, gif, bmp, tiff, `Exec=shotnote %f`.
+- [x] Desktop file `io.github.sadigaxund.Annoview.desktop`, MimeType png, jpeg, webp, gif, bmp, tiff, `Exec=annoview %f`.
 - [x] `nix build` and `nix flake check` pass.
 - [x] `cargo test` covers naming, save-copy rule, settings, palette, history, zoom math, folder order, pixel helpers.
 - [x] Planted defects were caught in the naming, palette, settings and view tests. The folder test caught a real ordering bug.
@@ -197,10 +197,10 @@ A line starting with "Differs" records a deliberate gap and its reason.
 
 ## Debug switches
 
-- `SHOTNOTE_TIMING=1` prints milliseconds to the first painted frame and exits.
-- `SHOTNOTE_TIMING=2` prints each startup stage to stderr and runs normally.
-- `SHOTNOTE_DUMP=<file>` writes the window as a PNG after 1.5 s and exits.
-- Building with `--features selftest` adds `SHOTNOTE_SCRIPT=<file>`, a scripted driver used to check tools, keys, save rules and viewer actions in a headless sway session.
+- `ANNOVIEW_TIMING=1` prints milliseconds to the first painted frame and exits.
+- `ANNOVIEW_TIMING=2` prints each startup stage to stderr and runs normally.
+- `ANNOVIEW_DUMP=<file>` writes the window as a PNG after 1.5 s and exits.
+- Building with `--features selftest` adds `ANNOVIEW_SCRIPT=<file>`, a scripted driver used to check tools, keys, save rules and viewer actions in a headless sway session.
 
 ## Not verified on this machine
 

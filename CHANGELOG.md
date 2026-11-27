@@ -6,6 +6,13 @@ Releases use date versions: `YYYY.MM.DD`, tagged `vYYYY.MM.DD`.
 
 ## [Unreleased]
 
+### Changed
+
+- Renamed the app from Shotnote to Annoview. The binary is `annoview`, the app ID is `io.github.sadigaxund.Annoview`, and the desktop file and icon use that ID.
+- Settings moved to `~/.config/annoview/settings.json`. Move the old `~/.config/shotnote/` folder by hand.
+- `SHOTNOTE_TIMING`, `SHOTNOTE_DUMP` and `SHOTNOTE_SCRIPT` are now `ANNOVIEW_TIMING`, `ANNOVIEW_DUMP` and `ANNOVIEW_SCRIPT`.
+- The Unreleased compare link points to `sadigaxund/annoview`.
+
 ## [2026.11.27]
 
 ### Changed
@@ -22,5 +29,5 @@ Releases use date versions: `YYYY.MM.DD`, tagged `vYYYY.MM.DD`.
 - `SHOTNOTE_TIMING=1` prints the time to the first painted frame and exits.
 - Desktop entry for png, jpeg, webp, gif, bmp and tiff.
 
-[Unreleased]: https://github.com/sadigaxund/shotnote/compare/v2026.11.27...HEAD
+[Unreleased]: https://github.com/sadigaxund/annoview/compare/v2026.11.27...HEAD
 [2026.11.27]: https://github.com/sadigaxund/shotnote/releases/tag/v2026.11.27
